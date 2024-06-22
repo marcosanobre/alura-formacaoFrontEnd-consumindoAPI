@@ -18,13 +18,14 @@ async function buscaEMostraVideos() {
                                                 <img class="img-canal" src="${video.imagem}" alt="Logo do Canal">
                                                 <h3 class="titulo-video">${video.titulo}</h3>
                                                 <p class="titulo-canal">${video.descricao}</p>
+                                                <p class="categoria" hidden>${video.categoria}</p>
                                             </div>
 
                                         </li>
                                     `;
                                 } 
         );
-    } catch( error) {
+    } catch( erro ) {
         containerVideos.innerHTML = `<p>Houve um erro ao carregar os vídeos: ${erro}</p>`;
     } finally {
         // sempre acontece
@@ -40,7 +41,31 @@ barraDePesquisa.addEventListener( 'input', filtrarPesquisa );
 
 function filtrarPesquisa() {
     const videos = document.querySelectorAll( '.videos_item' );
-}
+    const valorFiltro = barraDePesquisa.value.toLowerCase();
+    videos.forEach( (video) => { 
+        const titulo = video.querySelector('.titulo-video').textContent.toLowerCase();
+
+        video.style.display = valorFiltro ? titulo.includes( valorFiltro ) ? 'block' : 'none' : 'block';
+    } );
+};
+
+const botaoCategoria = document.querySelectorAll(".superior__item");
+
+botaoCategoria.forEach( (botao) => {
+    let nomeCategoria = botao.getAttribute("name");
+    botao.addEventListener( "click", () => filtrarPorCategoria( nomeCategoria ) );
+});
+
+function filtrarPorCategoria( filtro ) {
+    const videos = document.querySelectorAll( '.videos_item' );
+    const valorFiltro = filtro.toLowerCase();
+    videos.forEach( (video) => {
+        const categoria = video.querySelector('.categoria').textContent.toLowerCase();
+        video.style.display = (valorFiltro && valorFiltro != 'tudo') ? (categoria.includes( valorFiltro ) ? 'block' : 'none') : 'block';
+    } );
+};
+
+
 
 
 
